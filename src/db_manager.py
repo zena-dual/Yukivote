@@ -172,7 +172,7 @@ class TheaterChallengeDatabaseManager():
         if record is None:
             return None
 
-        return [{'name': record[i*2], 'score': record[i*2+1]} for i in range(10)]
+        return [{'name': record[1][i*2], 'score': record[1][i*2+1]} for i in range(10)]
 
     @staticmethod
     def get_current_record_without_join(table: str) -> list or None:
@@ -188,7 +188,7 @@ class TheaterChallengeDatabaseManager():
         if record is None:
             return None
 
-        return [{'id': record[1][i*2], 'score': record[1][i*2+1]} for i in range(10)]
+        return [{'id': record[i*2], 'score': record[i*2+1]} for i in range(10)]
 
     @staticmethod
     def insert_new_rankiing_record(table: str, response_time: datetime.datetime, ranking_data: list) -> None:
