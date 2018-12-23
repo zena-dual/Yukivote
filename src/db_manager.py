@@ -139,7 +139,7 @@ class TheaterChallengeDatabaseManager():
         with DatabaseManager(settings.TC_DATABASE) as manager:
             query = '''
                 SELECT
-                    i1.name, t.first_score
+                    i1.name,  t.first_score,
                     i2.name,  t.second_score,
                     i3.name,  t.third_score,
                     i4.name,  t.forth_score,
