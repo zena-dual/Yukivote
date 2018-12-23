@@ -104,7 +104,7 @@ async def on_message(message):
                 ranking = [
                     get_ranking_str(i+1, data['name'], data['score']) +
                     '（+' + str(data['score'] - previous_record[i]['score']) + '）'
-                    for i, data in current_record
+                    for i, data in enumerate(current_record)
                 ]
                 reply = assemble_message(drama, keyword, ranking)
 
