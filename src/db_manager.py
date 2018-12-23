@@ -131,6 +131,52 @@ class TheaterChallengeDatabaseManager():
         return [{'name': record[i*2], 'score': record[i*2+1]} for i in range(10)]
 
     @staticmethod
+    def get_previous_record(table: str) -> list or None:
+        """
+        指定されたランキングテーブルの２つ前までのレコードを取得する
+        """
+
+        with DatabaseManager(settings.TC_DATABASE) as manager:
+            query = '''
+                SELECT
+                    i1.name, t.first_score
+                    i2.name,  t.second_score,
+                    i3.name,  t.third_score,
+                    i4.name,  t.forth_score,
+                    i5.name,  t.fifth_score,
+                    i6.name,  t.sixth_score,
+                    i7.name,  t.fifth_score,
+                    i8.name,  t.eighth_score,
+                    i9.name,  t.ninth_score,
+                    i10.name, t.tenth_score
+                    FROM
+                ''' + table + ''' AS t
+                        JOIN idols as i1  ON i1.id  = t.first_idol_id
+                        JOIN idols as i2  ON i2.id  = t.second_idol_id
+                        JOIN idols as i3  ON i3.id  = t.third_idol_id
+                        JOIN idols as i4  ON i4.id  = t.forth_idol_id
+                        JOIN idols as i5  ON i5.id  = t.fifth_idol_id
+                        JOIN idols as i6  ON i6.id  = t.sixth_idol_id
+                        JOIN idols as i7  ON i7.id  = t.seventh_idol_id
+                        JOIN idols as i8  ON i8.id  = t.eighth_idol_id
+                        JOIN idols as i9  ON i9.id  = t.ninth_idol_id
+                        JOIN idols as i10 ON i10.id = t.tenth_idol_id
+                    ORDER BY
+                        t.time
+                        DESC
+                    OFFSET
+                        1
+                    LIMIT
+                        2
+                ;'''
+            record = manager.find(query)
+
+        if record is None:
+            return None
+
+        return [{'name': record[i*2], 'score': record[i*2+1]} for i in range(20) if i > 9]
+
+    @staticmethod
     def get_current_record_without_join(table: str) -> list or None:
         """
         指定されたテーブルの最新レコードを、JOINしていない状態で取得する

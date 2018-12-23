@@ -96,12 +96,14 @@ async def on_message(message):
 
             # 最新レコードから５人分のランキングデータを組み立て
             current_record = TheaterChallengeDatabaseManager.get_current_record(table)
+            previous_record = TheaterChallengeDatabaseManager.get_previous_record(table)
 
             if current_record is None:
                 reply = 'データの取得に失敗しました。しばらくしてから再度お試しください。'
             else:
                 ranking = [
-                    get_ranking_str(i+1, data['name'], data['score'])
+                    get_ranking_str(i+1, data['name'], data['score']) +
+                    '（+' + str(data['score'] - previous_record[i]['score']) + '）'
                     for i, data in current_record
                 ]
                 reply = assemble_message(drama, keyword, ranking)
