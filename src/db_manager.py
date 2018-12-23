@@ -164,8 +164,6 @@ class TheaterChallengeDatabaseManager():
                     ORDER BY
                         t.time
                         DESC
-                    OFFSET
-                        1
                     LIMIT
                         2
                 ;'''
