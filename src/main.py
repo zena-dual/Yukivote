@@ -179,7 +179,7 @@ async def on_ready():
 
             # 各ランキングの上位５人の得票状況を差分含めて生成
             ranking_str = [
-                get_ranking_str(idol['rank'], idol['idol_name'], idol['score']) + f'　（+{differences[index]}）'
+                get_ranking_str(idol['rank'], idol['idol_name'], idol['score']) + f'（+{differences[index]}）'
                 for index, idol in enumerate(ranking[:5])
             ]
             message = assemble_message(drama, role, ranking_str)
