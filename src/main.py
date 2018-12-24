@@ -101,11 +101,17 @@ async def on_message(message):
             if current_record is None:
                 reply = 'データの取得に失敗しました。しばらくしてから再度お試しください。'
             else:
-                ranking = [
-                    get_ranking_str(i+1, data['name'], data['score']) +
-                    '（+' + str(data['score'] - previous_record[i]['score']) + '）'
-                    for i, data in enumerate(current_record)
-                ]
+                # 差分含めてランキングデータ組み立て
+                ranking = []
+                for i, data in enumerate(current_record):
+                    # 同じアイドルに対するスコアの差分を取る
+                    previous_score = list(filter(lambda x: x['name'] == data['name'], previous_record))
+                    if len(previous_score) == 0:
+                        difference = 0
+                    else:
+                        difference = data['score'] - previous_score[0]['score']
+                    ranking.append(get_ranking_str(i+1, data['name'], data['score']) + f'（+{difference}）')
+
                 reply = assemble_message(drama, keyword, ranking)
 
     if reply is not None:
@@ -159,10 +165,14 @@ async def on_ready():
                 differences = [0] * 10
             else:
                 # TODO: 差分が完全に0の場合は再取得
-                differences = [
-                    idol['score'] - prev_record[i]['score']
-                    for i, idol in enumerate(ranking)
-                ]
+                differences = []
+                for i, idol in enumerate(ranking):
+                    # 同じアイドルに対するスコアの差分を取る
+                    previous_score = list(filter(lambda x: x['id'] == idol['idol_id'], prev_record))
+                    if len(previous_score) == 0:
+                        differences.append(0)
+                    else:
+                        differences.append(idol['score'] - previous_score[0]['score'])
 
             # 現在のランキング情報をDBに入れる
             TheaterChallengeDatabaseManager.insert_new_rankiing_record(table, response_time, ranking)
