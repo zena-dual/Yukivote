@@ -127,6 +127,8 @@ async def on_ready():
     channel = client.get_channel(settings.TC_RANKING_CHANNEL_ID)
     print('connected')
 
+    return
+
     api_url = 'https://api.matsurihi.me/mltd/v1/election/current?prettyPrint=false'
 
     while True:
